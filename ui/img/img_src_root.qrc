@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="img">
+    <file>pngwing.com.png</file>
+    <file>arduino_uno.png</file>
+  </qresource>
+</RCC>
