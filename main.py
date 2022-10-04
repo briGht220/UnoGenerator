@@ -358,9 +358,9 @@ class MainWindow(QMainWindow, Ui_mainWindow):
             if i["PinState"]:
                 if not i["PinMode"]:
                     if not i["PinType"]:
-                        command = "  val" + str(InputPinCounter) + " = digitalRead(" + i["PinName"] + ")\n"
+                        command = "  int val" + str(InputPinCounter) + " = digitalRead(" + i["PinName"] + ");\n"
                     else:
-                        command = "  val" + str(InputPinCounter) + " = analogRead(" + i["PinName"] + ")\n"
+                        command = "  int val" + str(InputPinCounter) + " = analogRead(" + i["PinName"] + ");\n"
                     InputPinCounter += 1
                     file.write(command)
 
@@ -371,9 +371,9 @@ class MainWindow(QMainWindow, Ui_mainWindow):
             if i["PinState"]:
                 if i["PinMode"]:
                     if not i["PinType"]:
-                        command = "  digitalWrite(" + i["PinName"] + ", HIGH)\n"
+                        command = "  digitalWrite(" + i["PinName"] + ", HIGH);\n"
                     else:
-                        command = "  analogWrite(" + i["PinName"] + ", 100)\n"
+                        command = "  analogWrite(" + i["PinName"] + ", 100);\n"
                     file.write(command)
 
         command = "/* Example Code End */\n\n}\n"
