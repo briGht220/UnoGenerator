@@ -30,6 +30,8 @@ class MainWindow(QMainWindow, Ui_mainWindow):
     def init(self) -> None:
         """
         init 함수
+        프로그래밍 편의성을 위해, 각 위젯들을 리스트에 저장
+        각 핀의 상태의 경우, Dict 형태로 리스트에 저장
         :return:
         """
         self.DigitalPinList = [
@@ -142,18 +144,28 @@ class MainWindow(QMainWindow, Ui_mainWindow):
         self.actionQuit_3.triggered.connect(self.ExitApp)
 
     def ExitApp(self) -> None:
+        """
+        앱을 종료하는 함수 (메뉴바에 quit 버튼과 대응)
+        :return:
+        """
         QCoreApplication.instance().quit()
 
     def PinCheckBoxEventHandler(self) -> None:
         """
-        Pin Check 박스 에빈트 핸들러
+        pin 체크박스 이벤트 발생시 실행되는 함수
+        체크박스가 toggle 될 때 발생하며, 리스트뷰 위젯에 체크박스가 활성화 되어있는 핀 목록이 표시됨
         :return:
         """
+        # list view의 경우, 아이템을 삭제하는 기능이 없어, 초기화 후 갱신함
         self.deleteItemToListView()
         self.PinStateCheck()
         self.listView.setModel(self.listViewModel)
 
     def PinStateCheck(self) -> None:
+        """
+        체크박스가 체크되지 않았을 때, 해당 핀의 Dict를 초기화하는 함수
+        :return:
+        """
         for i in self.DigitalPinList:
             if not i.isChecked():
                 command = "self." + i.objectName() + "_DICT[\"PinState\"] = 0\n"
@@ -186,7 +198,7 @@ class MainWindow(QMainWindow, Ui_mainWindow):
     def deleteItemToListView(self) -> None:
         """
         체크 해제한 Pin을 리스트뷰에서 지우는 함수
-        Delete 함수가 없기 때문에, clear (초기화) 후 다시 리스트뷰에 아이템을 올림
+        item을 삭제하는 함수가 없기 때문에, clear(초기화) 후 다시 리스트뷰에 아이템을 올림
         :return:
         """
         self.listViewModel.clear()
@@ -195,6 +207,7 @@ class MainWindow(QMainWindow, Ui_mainWindow):
     def ListViewClickEventHandler(self) -> None:
         """
         ListView에서 아이템을 클릭했을 때의 헨들러
+        현재 선택된 아이템의 dict를 저장함
         :return:
         """
         items = self.listView.selectedIndexes()
@@ -214,7 +227,7 @@ class MainWindow(QMainWindow, Ui_mainWindow):
     def CheckPinConfig(self, pin_config: dict, Handler=True) -> None:
         """
         Pin 을 확인
-        그 Pin에서 사용할 수 있는
+        선택한 Pin에서 사용할 수 있는 옵션을 확인하여, Config 위젯을 enable 하는 함수
         :return:
         """
         self.selected_dict = pin_config
@@ -276,6 +289,11 @@ class MainWindow(QMainWindow, Ui_mainWindow):
         self.CheckPinConfig(self.selected_dict, False)
 
     def PinSaveButtonEventHandler(self) -> None:
+        """
+        save 버튼을 눌렀을 때 실행되는 함수
+        Config 위젯의 상태를 바탕으로, 선택된 item의 dict에 pin의 설정 값을 저장함
+        :return:
+        """
         if not self.LE_PINNAME.text().isspace():
             self.selected_dict["PinName"] = self.LE_PINNAME.text()
 
@@ -303,6 +321,11 @@ class MainWindow(QMainWindow, Ui_mainWindow):
             i.setEnabled(0)
 
     def GenerateArduinoCode(self) -> None:
+        """
+        Generate 버튼을 눌렀을 때 실행되는 함수
+        아두이노 소스코드를 만듦
+        :return:
+        """
         file = open("./arduino_setup_src.c", 'w')
 
         self.GenerateArduinoCode_Write_Define(file)
